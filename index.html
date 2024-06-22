@@ -1,1 +1,281 @@
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendom number genrator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .main {
+            background-color: #eee;
+        }
+
+        input {
+            width: 100%;
+            border: 1px solid #ebd2d2;
+            border-radius: 4px;
+            outline: none;
+            height: 37px;
+            padding-left: 15px;
+        }
+
+        label {
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 24px;
+            letter-spacing: -.0048em;
+            color: #27364b;
+        }
+
+        button {
+            padding: 6px 10px;
+            width: 100%;
+        }
+
+        ul {
+            background: #fff;
+            padding: 15px;
+            padding-left: 35px;
+            border-radius: 5px;
+        }
+
+        li {
+            padding: 5px 0px;
+        }
+
+        header {
+            background-color: #eee;
+            padding: 20px 0px;
+        }
+
+        #resetButton {
+            display: none;
+        }
+
+        strong {
+            font-size: 18px;
+            padding: 0px 8px;
+        }
+
+        .winner {
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+        .report{
+            overflow: scroll;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-2 col-6">
+                    <img src="https://www.wishfin.com/images/home-page/wishfin-logo.svg" alt="">
+                </div>
+                <div class="col-lg-2 col-6">
+                    <img src="https://www.wishfin.com/images/kreditbee/kredit_bee_logo.svg" alt="">
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="py-5 mt-2">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="main p-sm-5 p-2 rounded-3">
+
+                        <div class="row  justify-content-between">
+                            <div class="col-lg-6">
+                                <label for="">User 2 Input</label>
+                                <input type="text" id="nilesh">
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="">Shubham Input</label>
+                                <input type="text" id="shubham">
+                            </div>
+                        </div>
+                        <div class="row justify-content-between align-items-end my-5">
+                            <div class="col-lg-6">
+                                <label for="">Rendom number genrator</label> <br>
+                                <input type="text" id="randomNumber" value="1">
+                            </div>
+                            <div class="col-lg-6">
+                                <button type="button" id="generateButton" class="btn btn-sm btn-success">Genrate &
+                                    Calculate</button>
+                            </div>
+                        </div>
+                        <div class="my-5">
+                            <h2 class="winner text-center"></h2>
+                            <ul>
+                                <li class="random">Rendom number is <strong>______ </strong></li>
+                                <li class="nilesh">User 2 guess <strong> ______ </strong> % correct</li>
+                                <li class="shubham">Shubham guess <strong> ______ </strong> % correct</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-12 text-center">
+                            <button type="button" id="generateReport" class="btn btn-sm btn-success mx-auto">Generate
+                                Report</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let attempts = []; // Array to store all attempts data
+
+        $('#generateButton').click(function () {
+            let numDigits = parseInt($('#randomNumber').val());
+            let nileshGuess = parseInt($('#nilesh').val());
+            let shubhamGuess = parseInt($('#shubham').val());
+
+            if (isNaN(numDigits) || numDigits <= 0) {
+                alert('Please enter a valid positive integer for the number of digits.');
+                return;
+            }
+
+            if (isNaN(nileshGuess) || isNaN(shubhamGuess)) {
+                alert('Please enter valid numbers for both guesses.');
+                return;
+            }
+
+            let min = Math.pow(10, numDigits - 1);
+            let max = Math.pow(10, numDigits) - 1;
+            let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+
+            let maxDifference = max - min;
+
+            let nileshDifference = Math.abs(randomNumber - nileshGuess);
+            let shubhamDifference = Math.abs(randomNumber - shubhamGuess);
+
+            let nileshPercentage = 100 - ((nileshDifference / maxDifference) * 100);
+            let shubhamPercentage = 100 - ((shubhamDifference / maxDifference) * 100);
+
+            $('.random strong').html(randomNumber);
+            $('.nilesh strong').html(nileshPercentage.toFixed(2));
+            $('.shubham strong').html(shubhamPercentage.toFixed(2));
+
+            let winner;
+            if (nileshPercentage > shubhamPercentage) {
+                winner = 'User2';
+            } else if (shubhamPercentage > nileshPercentage) {
+                winner = 'Shubham';
+            } else {
+                winner = 'It\'s a tie!';
+            }
+
+            $('.winner').html(winner);
+
+            // Store the data in the attempts array
+            attempts.push({
+                randomNumber: randomNumber,
+                nileshGuess: nileshGuess,
+                shubhamGuess: shubhamGuess,
+                nileshPercentage: nileshPercentage.toFixed(2),
+                shubhamPercentage: shubhamPercentage.toFixed(2),
+                winner: winner
+            });
+
+            $('input').val(''); // Clear input fields
+        });
+
+        $('#generateReport').click(function () {
+            if (attempts.length === 0) {
+                alert('Please generate some attempts first.');
+                return;
+            }
+
+            let reportHtml = `
+        <table class="table table-bordered mt-5">
+            <thead>
+                <tr>
+                    <th>Attempt</th>
+                    <th>Random Number</th>
+                    <th>User 2's Guess</th>
+                    <th>User 2's Closeness (%)</th>
+                    <th>Shubham's Guess</th>
+                    <th>Shubham's Closeness (%)</th>
+                    <th>Winner</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+            attempts.forEach((attempt, index) => {
+                reportHtml += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${attempt.randomNumber}</td>
+                <td>${attempt.nileshGuess}</td>
+                <td>${attempt.nileshPercentage}</td>
+                <td>${attempt.shubhamGuess}</td>
+                <td>${attempt.shubhamPercentage}</td>
+                <td>${attempt.winner}</td>
+            </tr>
+        `;
+            });
+
+            reportHtml += `
+            </tbody>
+        </table>
+    `;
+
+            // Calculate overall statistics
+            let totalNileshPercentage = 0;
+            let totalShubhamPercentage = 0;
+            let nileshWins = 0;
+            let shubhamWins = 0;
+            let ties = 0;
+
+            attempts.forEach(attempt => {
+                totalNileshPercentage += parseFloat(attempt.nileshPercentage);
+                totalShubhamPercentage += parseFloat(attempt.shubhamPercentage);
+                if (attempt.winner === 'User 2') {
+                    nileshWins++;
+                } else if (attempt.winner === 'Shubham') {
+                    shubhamWins++;
+                } else {
+                    ties++;
+                }
+            });
+
+            let overallNileshPercentage = (totalNileshPercentage / attempts.length).toFixed(2);
+            let overallShubhamPercentage = (totalShubhamPercentage / attempts.length).toFixed(2);
+            let overallWinner = nileshWins > shubhamWins ? 'Nilesh' : shubhamWins > nileshWins ? 'Shubham' : 'It\'s a tie!';
+
+            reportHtml += `
+        <div class="overall-report">
+            <h3>Overall Results</h3>
+            <p>Average Closeness - User 2: ${overallNileshPercentage}%</p>
+            <p>Average Closeness - Shubham: ${overallShubhamPercentage}%</p>
+            <p>Total Wins - User 2: ${nileshWins}</p>
+            <p>Total Wins - Shubham: ${shubhamWins}</p>
+            <p>Total Ties: ${ties}</p>
+            <h4>Overall Winner: ${overallWinner}</h4>
+        </div>
+    `;
+
+            // Append or update the report in the DOM
+            if ($('.report').length) {
+                $('.report').html(reportHtml);
+            } else {
+                $('.main').append('<div class="report">' + reportHtml + '</div>');
+            }
+        });
+
+    </script>
+</body>
+
+</html>
